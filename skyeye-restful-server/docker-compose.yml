@@ -1,0 +1,27 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./skyeye-restful-server:/skyeye-docker-server
+      - ./nginx:/etc/nginx/conf.d
+      - ./skyeye-restful-server/static:/static
+      - ./skyeye-restful-server/media:/media
+    depends_on:
+      - web
+  web:
+    build:
+      context: ./skyeye-restful-server
+      dockerfile: Dockerfile
+    container_name: skyeye-restapi
+    # command: gunicorn server.wsgi:application --bind 0.0.0.0:8001
+    command: daphne -b 0.0.0.0 -p 8001 server.asgi:application
+    volumes:
+      - ./skyeye-restful-server:/skyeye-docker-server
+      - ./skyeye-restful-server/static:/static
+      - ./skyeye-restful-server/media:/media
+    ports:
+      - "8001"

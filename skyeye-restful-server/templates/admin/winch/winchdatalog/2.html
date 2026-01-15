@@ -1,0 +1,120 @@
+{% load i18n static admin_list jazzmin %}
+{% get_jazzmin_ui_tweaks as jazzmin_ui %}
+
+<!-- 필터 폼 -->
+<script>
+
+</script>
+<div class="col-12 pb-4" id="change-list-filters">
+    <form id="changelist-search" method="GET">
+        <div class="form-group row">
+            <div class="col-4">
+                <select name="winch_serial_number" id="serial_number" class="form-control mb-2">
+                    <option value="">{{ cl.list_filter.0 }}</option>
+                    <option value="">-----------</option>
+                </select>
+
+                <select name="options" id="options" class="form-control mb-2">
+                    <option value="">Select Options</option>
+                    <option value="">-----------</option>
+                    {% for name in cl.list_display %}
+                        {% if forloop.counter > 3 and forloop.last != True %}
+                            <option value="{{ name }}">{{ name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-8">
+                <div class="form-group mb-1">
+                    <label style="width: 80px">Start Date</label>
+                    <input id="start_date" name="date__range__gte_0" class="form-control datepicker" style="width: 250px; display:inline-block;" type="text"
+                        data-provide="datepicker" data-date-format="yyyy-mm-dd">
+                    <a href="#" class="select_today ml-2" style="font-size: 14px;">Today</a>
+                </div>
+                <div class="form-group mb-1">
+                    <label style="width: 80px">Start Time</label>
+                    <input id="start_time" name="date__range__gte_1" class="form-control" style="width: 250px; display:inline-block;" type="text">
+                    <a href="#" class="select_now ml-2" style="font-size: 14px;">Now</a>
+                </div>
+                <div class="form-group mb-1">
+                    <label style="width: 80px">End Date</label>
+                    <input id="end_date" name="date__range__lte_0" class="form-control" style="width: 250px; display:inline-block;" type="text"
+                        data-provide="datepicker" data-date-format="yyyy-mm-dd">
+                    <a href="#" class="select_today ml-2" style="font-size: 14px;">Today</a>
+                </div>
+                <div class="form-group mb-1 pb-4">
+                    <label style="width: 80px">End Time</label>
+                    <input id="end_time" name="date__range__lte_1" class="form-control" style="width: 250px; display:inline-block;" type="text">
+                    <a href="#" class="select_now ml-2" style="font-size: 14px;">Now</a>
+                </div>
+                <button type="button" class="btn btn-primary" id="btn_submit">Search</button>
+                <button type="reset" class="btn btn-primary" id="btn_reset">Reset</button>
+            </div >
+        </div>
+    </form >
+
+    {% if cl.has_filters or cl.search_fields %}
+    <div class="form-group" id="search_group">             
+<!--                <button type="submit" class="btn {{ jazzmin_ui.button_classes.primary }}">{% trans 'Search' %}</button>-->
+        {% if show_result_count %}
+            <span class="small quiet">
+                {% blocktrans count counter=cl.result_count %}{{ counter }} result{% plural %}{{ counter }} results{% endblocktrans %}
+                (<a href="?{% if cl.is_popup %}_popup=1{% endif %}">
+                    {% if cl.show_full_result_count %}
+                        {% blocktrans with full_result_count=cl.full_result_count %}{{ full_result_count }} total{% endblocktrans %}
+                    {% else %}
+                        {% trans "Show all" %}
+                    {% endif %}
+                </a>)
+            </span>
+        {% endif %}
+        {% admin_extra_filters cl as extra_filters %}
+        {% for pair in extra_filters.items %}
+            {% if pair.0 != search_var %}<input type="hidden" name="{{ pair.0 }}" value="{{ pair.1 }}">{% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div >
+
+{% comment %}
+<div class="col-12 pb-4" id="change-list-filters">
+    <form id="changelist-search" class="form-inline" method="GET">        
+        {% block filters %}
+            {% if cl.has_filters %}
+                {% for spec in cl.filter_specs %}
+                    {% jazzmin_list_filter cl spec %}
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
+        
+        {% if cl.search_fields %}
+        <div class="form-group">
+            <input class="form-control" type="text" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar">
+        </div>
+        {% endif %}
+        
+        {% if cl.has_filters or cl.search_fields %}
+            <div class="form-group" id="search_group">             
+<!--                <button type="submit" class="btn {{ jazzmin_ui.button_classes.primary }}">{% trans 'Search' %}</button>-->
+                {% if show_result_count %}
+                    <span class="small quiet">
+                        {% blocktrans count counter=cl.result_count %}{{ counter }} result{% plural %}{{ counter }} results{% endblocktrans %}
+                        (<a href="?{% if cl.is_popup %}_popup=1{% endif %}">
+                            {% if cl.show_full_result_count %}
+                                {% blocktrans with full_result_count=cl.full_result_count %}{{ full_result_count }} total{% endblocktrans %}
+                            {% else %}
+                                {% trans "Show all" %}
+                            {% endif %}
+                        </a>)
+                    </span>
+                {% endif %}
+                {% admin_extra_filters cl as extra_filters %}
+                {% for pair in extra_filters.items %}
+                    {% if pair.0 != search_var %}<input type="hidden" name="{{ pair.0 }}" value="{{ pair.1 }}">{% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </form>
+</div>
+{% endcomment %}

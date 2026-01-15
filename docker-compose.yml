@@ -1,0 +1,61 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8001:8001"  
+    volumes:
+      - ./skyeye-restful-server:/skyeye-docker-server
+      - ./nginx:/etc/nginx/conf.d
+      - ./skyeye-restful-server/static:/static
+      - ./skyeye-restful-server/media:/media
+    depends_on:
+      - web
+    networks:
+      - skyeye-network
+
+  web:
+    build:
+      context: ./skyeye-restful-server
+      dockerfile: Dockerfile
+    container_name: skysys-restapi
+    command: daphne -b 0.0.0.0 -p 8001 server.asgi:application
+    volumes:
+      - ./skyeye-restful-server:/skyeye-docker-server
+      - ./skyeye-restful-server/static:/static
+      - ./skyeye-restful-server/media:/media
+    depends_on:
+      - mariadb
+    environment:
+      - DB_HOST=mariadb
+      - DB_NAME=skyeye_database
+      - DB_USER=root
+      - DB_PASSWORD=tmzkdltltm
+    networks:
+      - skyeye-network
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=tmzkdltltm
+      - MYSQL_DATABASE=skyeye_database
+      - LANG=C.UTF-8
+      - GOSU_VERSION=1.17
+      - MARIADB_VERSION=1:11.4.2+maria~ubu2404
+    volumes:
+      - /data/mariadb/data:/var/lib/mysql
+    ports:
+      - "3306:3306" 
+    command: mariadbd
+    networks:
+      - skyeye-network
+
+
+volumes:
+  mariadb_data:
+
+networks:
+  skyeye-network:
+    driver: bridge

@@ -1,0 +1,18 @@
+Django==3.2.17
+django-debug-toolbar
+drf_yasg
+djangorestframework
+# django-eventstream
+channels==3.0.5
+Pillow
+# gunicorn
+mysqlclient
+daphne
+Twisted[tls,http2]
+django-jazzmin
+drf-api-logger
+django-admin-rangefilter
+gripcontrol
+PyJWT
+django_grip
+django-apscheduler

@@ -1,0 +1,112 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKYEYE 알림 서비스</title>
+    <link rel="stylesheet" href="{% static 'css/kakao_style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="{% static 'img/logo.png' %}" alt="Skysys Logo" class="logo">
+            <div class="flex-container">
+                <h1>SKYEYE 알림 서비스 등록</h1>
+            </div>
+        </header>
+        <form id="registration-form" action="{% url 'register_user' %}" method="post">
+            {% csrf_token %}
+            <!-- 새 섹션 추가 -->
+            <section class="selection-section">
+                <p>
+                    <input type="checkbox" id="personal_data">
+                    개인정보 수집•이용 동의 (필수)
+                </p>
+                <p>
+                    1. 개인정보 수집 목적 및 항목<br>
+                        -  SKYEYE 알림 서비스 제공 : 성명, 전화번호
+                </p>
+                <p>
+                    2. 보유 및 이용기간 : 산불 감시 실증 기간
+                </p>
+                <p>
+                    * 귀하는 개인정보 수집에 동의를 거부할 권리가 있으며, 동의를 거부할 경우에는 SKYEYE 알림 서비스를 이용하실 수 없습니다.
+                </p>
+            </section>
+            <div class="spacer"></div>
+            <!-- 새 섹션 추가 -->
+            <section class="selection-section">
+                <h3>스카이아이 위치 (복수 선택 가능)</h3>
+                <div class="site-group">
+                    {% for item in items %}
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="site_item" class="item-checkbox" value="{{ item.site_id }}">
+                            {{ item.name }}
+                        </label><br>
+                    {% endfor %}
+                </div>
+            </section>
+            <div class="spacer"></div>
+            <div class="form-group">
+                <label for="name">● 성명 :</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone_number">● 전화번호(- 제외) : </label>
+                <input type="text" id="phone_number" name="phone_number" required>
+            </div>
+            <div class="spacer"></div>
+            <div class="form-group">
+                <button id="submit-button">제출</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+            const siteIdInput = document.getElementById('site_id');
+            const submitButton = document.getElementById('submit-button');
+            const form = document.getElementById('registration-form');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        siteIdInput.value = this.value; // 체크된 체크박스의 값을 site_id 필드에 설정
+                    }
+                });
+            });
+
+            submitButton.addEventListener('click', function(event) {
+                event.preventDefault(); // 기본 폼 제출 방지
+                // 폼 데이터 추출
+                const personalData = document.getElementById('personal_data').checked;
+                const name = document.getElementById('name').value;
+                const phoneNumber = document.getElementById('phone_number').value;
+                const selectedItems = Array.from(checkboxes)
+                                           .filter(checkbox => checkbox.checked)
+                                           .map(checkbox => checkbox.nextSibling.textContent.trim());
+
+                if(personalData)
+                {
+                    // 사용자 확인 알림창
+                    const confirmationMessage = `아래의 정보를 등록하시겠습니까?\n\n이름: ${name}\n전화번호: ${phoneNumber}\n알림 위치: ${selectedItems.join(', ')}`;
+                    const userConfirmed = confirm(confirmationMessage);
+
+                    if (userConfirmed) {
+                        form.submit(); // 폼 제출
+                        alert(`등록 되었습니다`);
+                    }
+                    // 아니요를 클릭하면 아무것도 하지 않음 (기존 화면으로 돌아감)
+                }
+                else
+                {
+                    alert(`필수 개인정보 수집•이용에 동의하지 않으면 해당 서비스를 사용하실 수 없습니다.`)
+                }
+            });
+        });
+    </script>
+</body>
+</html>

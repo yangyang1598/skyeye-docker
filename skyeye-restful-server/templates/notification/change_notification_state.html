@@ -1,0 +1,186 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKYEYE 알림 서비스</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+    <script>
+        async function fetchAndUpdateData() {
+            try {
+                const response = await fetch('/your-data-endpoint/');
+                const data = await response.json();
+
+                const tbody = document.querySelector('#site-table tbody');
+
+                data.forEach(site => {
+                    let row = document.querySelector(`#site-row-${site.site_id}`);
+                    if (!row) {
+                        row = document.createElement('tr');
+                        row.id = `site-row-${site.site_id}`;
+
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = site.name;
+                        row.appendChild(nameCell);
+
+                        const toggleCell = document.createElement('td');
+                        const label = document.createElement('label');
+                        label.className = 'switch';
+                        const input = document.createElement('input');
+                        input.type = 'checkbox';
+                        input.id = `toggle-checkbox-${site.site_id}`;
+                        input.onclick = () => toggleAlert(site.site_id);
+                        label.appendChild(input);
+                        const span = document.createElement('span');
+                        span.className = 'slider round';
+                        label.appendChild(span);
+                        toggleCell.appendChild(label);
+                        row.appendChild(toggleCell);
+
+                        tbody.appendChild(row);
+                    }
+                    
+                    const checkbox = document.getElementById(`toggle-checkbox-${site.site_id}`);
+                    checkbox.checked = site.alarm == 0 ? false : true;
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function toggleAlert(siteId) {
+            const checkbox = document.getElementById(`toggle-checkbox-${siteId}`);
+            const newState = checkbox.checked ? 'ON' : 'OFF';
+
+            fetch(`/notification/toggle_alert/${siteId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ state: newState })
+            }).then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // 성공적으로 처리되었으므로 데이터 갱신
+                    fetchAndUpdateData();
+                } else {
+                    // 실패 시 원상복구
+                    checkbox.checked = !checkbox.checked;
+                    console.error('Failed to toggle alert');
+                }
+            }).catch(error => {
+                // 실패 시 원상복구
+                checkbox.checked = !checkbox.checked;
+                console.error('Error:', error);
+            });
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // 10초마다 데이터를 갱신
+        setInterval(fetchAndUpdateData, 5000);
+
+        // 페이지 로드 시 초기 데이터 가져오기
+        document.addEventListener('DOMContentLoaded', fetchAndUpdateData);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <img src="{% static 'img/logo.png' %}" alt="Skysys Logo" class="logo">
+                <h1>SKYEYE 알림 서비스 활성화 / 비활성화</h1>
+            </div>
+        </header>
+        <table id="site-table">
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>알림 설정</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for site in items %}
+                    <tr id="site-row-{{ site.site_id }}">
+                        <td>{{ site.name }}</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-checkbox-{{ site.site_id }}" onclick="toggleAlert({{ site.site_id }})" {% if site.alarm %}checked{% endif %}>
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

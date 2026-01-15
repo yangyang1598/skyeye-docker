@@ -1,0 +1,168 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static jazzmin %}
+{% get_jazzmin_ui_tweaks as jazzmin_ui %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block content_title %} {% trans 'Dashboard' %} {% endblock %}
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+    <li class="breadcrumb-item">{% trans 'Dashboard' %}</li>
+</ol>
+{% endblock %}
+{% block content %}
+{% get_side_menu using="app_list" as dashboard_list %}
+{% if dashboard_list %}
+{% widthratio dashboard_list|length 2 1 as middle %}
+{% endif %}
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script> -->
+
+<!-- 추가 스크립트 -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+<script src="{% static 'admin/js/vendor/jquery/jquery.min.js' %}"></script>
+<!-- chart.js 4.2.1 => 날짜 어댑터 사용할려면 [날짜 라이브러리] + [어댑터] 필요함 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.js" integrity="sha512-vCUbejtS+HcWYtDHRF2T5B0BKwVG/CLeuew5uT2AiX4SJ2Wff52+kfgONvtdATqkqQMC9Ye5K+Td0OTaz+P7cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker-ui/2.6.1/timepicker-ui.umd.min.js" integrity="sha512-TAu+tSoew+STDqPhm7CIE9UDTgfyJzK4gJUQ/QYJ6lfZhwbiUn8pkXj5377PvSA7JTc/ijqG6bNXhMu/gzIAVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'admin/js/dashboard.js' %}"></script>
+<script>
+    // 장고 템플릿으로 받아온 데이터 js로 넘기기
+    // https://stackoverflow.com/a/49310063
+    $(function () {
+        let create_chart = Object.create(create_chart_module);
+        create_chart.init({
+            date : {{ date | safe }},
+            temperature : {{ temperature | safe }},
+            camera_roll : {{ camera_roll | safe }},
+            camera_pitch : {{ camera_pitch | safe }},
+            camera_yaw : {{ camera_yaw | safe }},
+            date2 : {{ date2 | safe }},
+            site_name : {{ site_name | safe }}
+        });
+    });
+</script>
+
+<div class="col-lg-9 col-12" style="margin-bottom: 4rem">
+    <!-- 대시보드 필터 부분 -->
+    <h5>Select Site</h5>
+    <div class="col-12 pb-4" id="change-list-date-hierarchy">
+        <!-- 임무장비 선택 부분 -->
+        <select name="site_site_name" id="site_name" class="form-control mb-2" style="width: 95%;">
+            <option value="">Select Site</option>
+            <option value="">--------------</option>
+        </select>
+        <!-- 임무장비 선택 부분 end -->
+
+        <div class="btn-group date-hierarchy text-sm">
+            <!-- 버튼 추가 부분 -->
+            <a class="btn btn-secondary" href="?" id="prev_date">&lsaquo; All dates</a>
+            <!-- 버튼 추가 부분 end -->
+        </div>
+
+        <!-- 타임피커 -->
+        <div class="col-12 pb-4" id="timepicker" style="display: none;">
+            <hr>
+            <form id="time_range_search" class="form-inline" method="GET">
+                <input type="hidden" class="save-option" name="options">
+                <input type="hidden" class="save-day" name="date__day">
+                <input type="hidden" class="save-month"  name="date__month">
+                <input type="hidden" class="save-year"  name="date__year">
+                <div class="col-12">
+                    <div class="timepicker-ui-1 mb-3">
+                        <h5>Start Time :</h5>
+                        <input type="text" class="timepicker-ui-input" value="" name="date__range__gte_1" id="first_timepicker" />
+                    </div>
+                    <div class="timepicker-ui-2 mb-3">
+                        <h5>End Time :</h5>
+                        <input type="text" class="timepicker-ui-input" value="" name="date__range__lte_1" id="second_timepicker" />
+                    </div>
+                </div>
+                <div class="col-12 my-2">
+                    <input type="submit" class="btn btn-primary" value="Search">
+                    <input type="reset" class="btn btn-primary" value="Reset">
+                </div>
+            </form>
+        </div>
+        <!-- 타임피커 end -->
+
+    </div>
+    <!-- 대시보드 필터 end -->
+    
+    <h5>Mission Device</h5>
+    <div style="width: 100%; height: 450px;">
+        <canvas style="margin-bottom: 30px; width: 100%; height: 100%;" id="myChart1"></canvas>
+    </div>
+    <div style="width: 100%; height: 450px;" class="mb-4">
+        <canvas style="margin-bottom: 30px; width: 100%; height: 100%;" id="myChart3"></canvas>
+    </div>
+    <h5>Winch</h5>
+    <div style="width: 100%;">
+        <canvas style="margin-bottom: 30px; width: 100%; height: 100%;" id="myChart2"></canvas>
+    </div>
+</div>
+
+<div class="col-lg-3 col-12">
+    <div id="content-related">
+        <div class="module" id="recent-actions-module">
+            <h4 class="mb-3">{% trans 'Recent actions' %}</h4>
+            {% load log %}
+            {% get_admin_log 6 as admin_log for_user user %}
+            {% if not admin_log %}
+            <p>{% trans 'None available' %}</p>
+            {% else %}
+            <div class="timeline">
+                {% for entry in admin_log %}
+                <div>
+                    {% if entry.is_change %}
+                    <i class="fas fa-edit bg-gray text-xs"></i>
+                    {% elif entry.is_deletion %}
+                    <i class="fas fa-trash bg-danger text-xs"></i>
+                    {% elif entry.is_addition %}
+                    <i class="fas fa-plus-circle bg-success text-xs"></i>
+                    {% endif %}
+
+                    <div class="timeline-item">
+                        <span class="time"><i class="fas fa-clock"></i> {% blocktrans with timesince=entry.action_time|timesince %}{{ timesince }} ago{% endblocktrans %}</span>
+                        <h3 class="timeline-header no-border">
+                            {% if entry.is_deletion or not entry.get_admin_url %}
+                            {{ entry.object_repr }}
+                            {% else %}
+                            <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                            {% endif %}
+
+                            {% if entry.model %}
+                            <span class="mini quiet">
+                                                {% filter capfirst %}
+                                                    {{ entry.model }}
+                                                {% endfilter %}
+                                            </span>
+                            {% endif %}
+                        </h3>
+                        {% if not entry.is_deletion %}
+                        <div class="timeline-body">
+                            {% if entry.is_addition %}
+                            {{ entry }}
+                            {% else %}
+                            <ul style="list-style: none; padding: 0;">
+                                {% action_message_to_list entry as action_message_list %}
+                                {% for action_message in action_message_list %}
+                                <li>{{ action_message.msg|style_bold_first_word }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                <div>
+                    <i class="fa fa-clock bg-gray"></i>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
