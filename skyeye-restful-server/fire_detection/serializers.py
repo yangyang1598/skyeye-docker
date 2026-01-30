@@ -3,7 +3,7 @@ from .models import Detection
 
 
 class DetectionSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(use_url=True)
+    # image = serializers.ImageField(use_url=True)
 
     class Meta:
         model = Detection
