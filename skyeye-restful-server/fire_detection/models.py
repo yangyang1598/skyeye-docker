@@ -11,4 +11,5 @@ class Detection(models.Model):
     class_name = models.CharField(max_length=100, null=True)
     ai_model = models.CharField(max_length=20, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
+    location=models.CharField(max_length=100,null=True)
     # image = models.ImageField(upload_to="image")

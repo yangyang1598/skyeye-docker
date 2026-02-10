@@ -7,6 +7,7 @@ import logging
 from django.core.mail.message import EmailMessage
 from server import settings
 from accounts.models import User
+from skyeye.models import Site
 from rest_framework.authtoken.models import Token
 import datetime
 from django_eventstream import send_event
@@ -68,8 +69,16 @@ class DetectionView(viewsets.ModelViewSet):
                     # 'channels-fire_detection' 채널로 이벤트 전송 (SSE 앱의 규칙 따름)
                     # site_id가 있으면 해당 채널로 전송 (예: channels-fire_detection-1)
                     if 'site_id' in sse_data and sse_data['site_id']:
-                        channel_name = 'channels-fire-{}'.format(sse_data['site_id'])
-                        send_event(channel_name, 'message', sse_data,user)
+                        try:
+                            site = Site.objects.get(site_id=sse_data['site_id'])
+                            # site_id에 해당하는 missiondevice_serial_number를 가져와서 채널명에 사용
+                            if site.missiondevice_serial_number_id:
+                                channel_name = 'channels-{}-GCS'.format(site.missiondevice_serial_number_id)
+                                send_event(channel_name, 'message', sse_data, user)
+                        except Site.DoesNotExist:
+                            db_logger.warning("Site not found for site_id: {}".format(sse_data['site_id']))
+                        except Exception as e:
+                            db_logger.exception("Error resolving channel name: {}".format(e))
                     
                     db_logger.info("Detection data saved and email sent successfully to {}".format(user.email))
 
