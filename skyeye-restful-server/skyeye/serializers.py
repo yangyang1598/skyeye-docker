@@ -12,3 +12,8 @@ class PoiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poi
         fields = '__all__'
+
+class Scan360ConfigSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Scan360Config
+        fields = '__all__'

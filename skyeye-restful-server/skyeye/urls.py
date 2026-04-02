@@ -8,5 +8,4 @@ router.register('poi', PoiViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('poi', PoiViewSet.as_view({'post':'create', 'patch':'partial_update','delete':'delete'})),
 ]

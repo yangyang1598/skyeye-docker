@@ -4,7 +4,7 @@ services:
     image: nginx:latest
     container_name: nginx
     ports:
-      - "8001:8001"  
+      - "4001:4001"  
     volumes:
       - ./skyeye-restful-server:/skyeye-docker-server
       - ./nginx:/etc/nginx/conf.d
@@ -20,7 +20,7 @@ services:
       context: ./skyeye-restful-server
       dockerfile: Dockerfile
     container_name: skysys-restapi
-    command: daphne -b 0.0.0.0 -p 8001 server.asgi:application
+    command: daphne -b 0.0.0.0 -p 4001 server.asgi:application
     volumes:
       - ./skyeye-restful-server:/skyeye-docker-server
       - ./skyeye-restful-server/static:/static
@@ -31,7 +31,7 @@ services:
       - DB_HOST=mariadb
       - DB_NAME=skyeye_database
       - DB_USER=root
-      - DB_PASSWORD=tmzkdltltm
+      - DB_PASSWORD=hap10003114
     networks:
       - skyeye-network
 
@@ -39,7 +39,7 @@ services:
     image: mariadb:latest
     container_name: mariadb
     environment:
-      - MYSQL_ROOT_PASSWORD=tmzkdltltm
+      - MYSQL_ROOT_PASSWORD=hap10003114
       - MYSQL_DATABASE=skyeye_database
       - LANG=C.UTF-8
       - GOSU_VERSION=1.17

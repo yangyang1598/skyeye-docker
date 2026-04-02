@@ -46,5 +46,5 @@ class NotificationUser(models.Model):
         return f"Name: {self.name} site:{self.site_id} phone_number:{self.phone_number}"
     
     class Meta:
-        managed = False
+        managed = True
         db_table = 'user_notification'

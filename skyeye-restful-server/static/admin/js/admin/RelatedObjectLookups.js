@@ -204,6 +204,23 @@
 
     $(document).ready(function() {
         setPopupIndex();
+
+        if (
+            document.body.classList.contains('app-accounts') &&
+            document.body.classList.contains('model-user') &&
+            document.body.classList.contains('add-form')
+        ) {
+            const groupsSelect = document.getElementById('id_groups');
+            if (groupsSelect && groupsSelect.tagName === 'SELECT') {
+                const manageOption = Array.from(groupsSelect.options).find(
+                    (opt) => (opt.textContent || '').trim() === 'Manage'
+                );
+                if (manageOption) {
+                    manageOption.selected = true;
+                }
+            }
+        }
+
         $("a[data-popup-opener]").on('click', function(event) {
             event.preventDefault();
             opener.dismissRelatedLookupPopup(window, $(this).data("popup-opener"));

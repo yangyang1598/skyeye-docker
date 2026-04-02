@@ -11,5 +11,8 @@ class CameraView(models.Model):
     cardinal_direction = models.CharField(max_length=100, blank=True, null=True, help_text='방위')
 
     class Meta:
+        indexes = [
+            models.Index(fields=['site', '-date']),
+        ]
         managed = False
         db_table = 'camera_view'

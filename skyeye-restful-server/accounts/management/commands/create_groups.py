@@ -41,11 +41,6 @@ GROUPS = {
     },
 }
 
-USERS = {
-    "test2": ["Member", "mwhwang@skysys.co.kz", "tmzkdltltm"],
-    # "my_admin_user": ["Administration", "admin@domain.ca", "1234"],
-    "admin": ["Administration", "skysys@skysys.co.kr", "tmzkdltltm"],
-}
 
 
 class Command(BaseCommand):

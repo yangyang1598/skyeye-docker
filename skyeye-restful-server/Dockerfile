@@ -13,5 +13,5 @@ WORKDIR /skyeye-docker-server
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# EXPOSE 8000
-# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "server.wsgi:application"]
+# EXPOSE 4001
+# CMD ["gunicorn", "--bind", "0.0.0.0:4001", "server.wsgi:application"]

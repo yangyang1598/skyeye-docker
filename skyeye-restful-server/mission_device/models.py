@@ -29,7 +29,7 @@ class Camera(models.Model):
     protocol = models.IntegerField(blank=True, null=True, help_text='프로토콜 타입')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'camera'
 
 
@@ -53,7 +53,7 @@ class Missiondevice(models.Model):
     # production_year = models.TextField(blank=True, null=True, help_text='제작 년도(1901-2155)')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'missiondevice'
 
 
@@ -81,7 +81,7 @@ class MissiondeviceDataLog(models.Model):
     rssi = models.IntegerField(db_column='rssi_lte', blank=True, null=True, help_text='무선통신 수신 감도')
 
     class Meta:
-        managed = False
+        managed = True
         indexes = [
             models.Index(fields=['date']),  # 'date' 필드에 인덱스 추가
         ]

@@ -16,6 +16,7 @@ class Site(models.Model):
                                                        blank=True, null=True, help_text='설치된 임무장비 일련번호')
     winch_serial_number = models.OneToOneField(Winch, models.DO_NOTHING, db_column='winch_serial_number',
                                                 blank=True, null=True, help_text='설치된 윈치 일련번호')
+    video_stream_url = models.CharField(max_length=200, blank=True, null=True, help_text='비디오 스트림 URL')
     missiondevice_pressure_offset=models.FloatField(blank=False, null=False, default=0, help_text='임무장비 기압 오프셋')
     winch_pressure_offset=models.FloatField(blank=False, null=False, default=0, help_text='윈치 기압 오프셋')
     missiondevice_altitude_low = models.FloatField(blank=True, null=True, help_text='임무장치 고도 하한')
@@ -25,18 +26,40 @@ class Site(models.Model):
     state = models.SmallIntegerField(blank=False, null=False, default=0, help_text='데이터 수신 상태')
     
     class Meta:
-        managed = False
+        managed = True
         db_table = 'site'
 
 class Poi(models.Model):
-    date = models.DateTimeField(primary_key=True, auto_now=True, help_text="기본키")
-    poi_id = models.IntegerField(help_text='지점 번호')
-    site = models.ForeignKey(Site, models.DO_NOTHING, db_column='site_id', help_text='사이트 번호')
+    id = models.AutoField(primary_key=True, help_text='auto increment PK')
+    date = models.DateTimeField(auto_now=True, help_text="날짜")
+    name = models.CharField(max_length=100, blank=True, null=True, help_text='지점명')
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, db_column='site_id', help_text='사이트 번호')
     latitude = models.FloatField(blank=True, null=True, help_text='위도')
     longitude = models.FloatField(blank=True, null=True, help_text='경도')
     altitude = models.FloatField(blank=True, null=True, help_text='고도')
     zoom_level = models.IntegerField(blank=True, null=True, help_text='줌레벨')
+    dwell_seconds = models.IntegerField(blank=False, null=False, default=20, help_text='체류 시간(초)')
+    pitch = models.FloatField(blank=True, null=True, help_text='Pitch')
+    order = models.IntegerField(blank=True, null=True, help_text='순서')
+
+    def save(self, *args, **kwargs):
+        if self.order is None:
+            last = Poi.objects.filter(site=self.site).order_by('-order').first()
+            self.order = 1 if not last else last.order + 1
+        super().save(*args, **kwargs)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'poi'
+
+
+class Scan360Config(models.Model):
+    id = models.AutoField(primary_key=True, help_text='auto increment PK')
+    site = models.OneToOneField(Site, on_delete=models.CASCADE, db_column='site_id', related_name="scan360", help_text='사이트 번호')
+    step_angle = models.FloatField(blank=True, null=True, help_text='회전 각도')
+    pitch = models.FloatField(blank=True, null=True, help_text='Pitch')
+    zoom_level = models.IntegerField(blank=True, null=True, help_text='줌레벨')
+    dwell_seconds = models.IntegerField(blank=False, null=False, default=20, help_text='체류 시간(초)')
+    class Meta:
+        managed = True
+        db_table = 'scan360_config'

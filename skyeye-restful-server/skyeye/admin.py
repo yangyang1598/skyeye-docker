@@ -22,10 +22,10 @@ class SiteAdmin(admin.ModelAdmin):
     # 관리자 화면에 보여질 칼럼 지정
     form = SiteAdminForm
     list_display = (
-        'name','installation_date', 'missiondevice_serial_number', 'winch_serial_number',
+        'name','installation_date', 'missiondevice_serial_number', 'winch_serial_number', 'video_stream_url',
         'missiondevice_altitude_low', 'missiondevice_pressure_offset', 'winch_pressure_offset')
     
-    fields=('name', 'installation_date','missiondevice_serial_number', 'winch_serial_number',
+    fields=('name', 'installation_date','missiondevice_serial_number', 'winch_serial_number','video_stream_url',
         'missiondevice_altitude_low', 'missiondevice_pressure_offset', 'winch_pressure_offset')
     # 정렬 기준 추가
     def get_queryset(self, request):
@@ -63,7 +63,7 @@ class SiteAdmin(admin.ModelAdmin):
 
 class PoiAdmin(admin.ModelAdmin):
     # 관리자 화면에 보여질 칼럼 지정
-    list_display = ('poi_id', 'site', 'latitude', 'longitude', 'altitude', 'zoom_level')
+    list_display = ('id', 'name', 'site', 'latitude', 'longitude', 'altitude', 'zoom_level', 'dwell_seconds', 'pitch')
     
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -82,6 +82,9 @@ class PoiAdmin(admin.ModelAdmin):
         
         return queryset
 
+class Scan360ConfigAdmin(admin.ModelAdmin):
+    list_display = ('id', 'site', 'step_angle', 'pitch', 'zoom_level', 'dwell_seconds')
 
 admin.site.register(Site, SiteAdmin)
 admin.site.register(Poi, PoiAdmin)
+admin.site.register(Scan360Config, Scan360ConfigAdmin)

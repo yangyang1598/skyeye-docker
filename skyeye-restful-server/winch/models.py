@@ -11,7 +11,7 @@ class Winch(models.Model):
     production_year = models.IntegerField(blank=True, null=True, help_text='제작 년도(1901-2155)')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'winch'
 
 
@@ -38,5 +38,5 @@ class WinchDataLog(models.Model):
     rssi = models.IntegerField(db_column='rssi_lte', blank=True, null=True, help_text='무선통신 수신 감도')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'winch_data_log'

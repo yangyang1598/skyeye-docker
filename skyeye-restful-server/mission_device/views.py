@@ -25,7 +25,7 @@ class MissionDeviceViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            print("임무장비", serializer.data)
+            # print("임무장비", serializer.data)
             return Response(status=status.HTTP_201_CREATED)
         else:
             db_logger.exception(status.HTTP_400_BAD_REQUEST)
@@ -63,13 +63,17 @@ class CameraViewSet(viewsets.ModelViewSet):
 class MissionDeviceDataLogViewSet(viewsets.ModelViewSet):
     queryset = MissiondeviceDataLog.objects.all()
     serializer_class = MissionDeviceDataLogSerializer
-    global warning_notification_send_time,queryset_site
-    warning_notification_send_time = {}
-    queryset_site = Site.objects.values_list('name', 'missiondevice_serial_number')
-    print(queryset_site)
-    for site in queryset_site:
-        warning_notification_send_time[site[0]] = time.time()
-        #if not site[0] in site_winch_temperature:
+    
+    # ✅ 이렇게 수정하세요
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 클래스 레벨에서 실행되지 않도록 __init__ 안으로 이동
+        global warning_notification_send_time, queryset_site
+        warning_notification_send_time = {}
+        queryset_site = Site.objects.values_list('name', 'missiondevice_serial_number')
+        
+        for site in queryset_site:
+            warning_notification_send_time[site[0]] = time.time()
         #    morning_9am = timezone.now().replace(hour=9, minute=0, second=0, microsecond=0)
         #    data = WinchDataLog.objects.filter(winch_serial_number=site[1], temperature__isnull=False, pressure__isnull=False, date__gte = morning_9am - timedelta(minutes=5)).last()
         #    site_winch_temperature[site[0]] = data.temperature if data != None else None
@@ -143,7 +147,7 @@ def check_site(data):
     global queryset_site,warning_notification_send_time
     try:
         DB_queryset_site = Site.objects.values_list('name', 'missiondevice_serial_number') #사이트 내용이 추가/삭제/변경시 새로 값 사이트값을 받아옴
-        print(DB_queryset_site,queryset_site)
+        # print(DB_queryset_site,queryset_site)
         db_dict = dict(DB_queryset_site)
         site_dict = dict(queryset_site)
 

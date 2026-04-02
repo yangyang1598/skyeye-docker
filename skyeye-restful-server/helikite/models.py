@@ -11,5 +11,5 @@ class Helikite(models.Model):
     image_file_path = models.CharField(max_length=100, blank=True, null=True, help_text='헬리카이트 이미지 파일 경로')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'helikite'

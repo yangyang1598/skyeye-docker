@@ -81,8 +81,8 @@ def send_warning(mode, phone_number, now, content):
                     {
                         "type": "WL",
                         "name": "알림 설정 활성화",
-                        "linkMobile": "http://skyeyeserver.duckdns.org:8001/notification/change_notification_state/",
-                        "linkPc": "http://skyeyeserver.duckdns.org:8001/notification/change_notification_state/"
+                        "linkMobile": "http://skysys.iptime.org:4001/notification/change_notification_state/",
+                        "linkPc": "http://skysys.iptime.org:4001/notification/change_notification_state/"
                     }]
             } for number in phone_number
         ]
@@ -103,8 +103,8 @@ def send_warning(mode, phone_number, now, content):
                     {
                         "type": "WL",
                         "name": "알림 설정 활성화",
-                        "linkMobile": "http://skyeyeserver.duckdns.org:8001/notification/change_notification_state/",
-                        "linkPc": "http://skyeyeserver.duckdns.org:8001/notification/change_notification_state/"
+                        "linkMobile": "http://skysys.iptime.org:4001/notification/change_notification_state/",
+                        "linkPc": "http://skysys.iptime.org:4001/notification/change_notification_state/"
                     }]
             } for number in phone_number
         ]
@@ -157,8 +157,8 @@ def send_change_notification_state(mode, phone_number, now, content):
                     {
                         "type": "WL",
                         "name": "알림 설정 활성화",
-                        "linkMobile": "http://skyeyeserver.duckdns.org:8001/notification/change_notification_state/",
-                        "linkPc": "http://skyeyeserver.duckdns.org:8001/notification/change_notification_state/"
+                        "linkMobile": "http://skysys.iptime.org:4001/notification/change_notification_state/",
+                        "linkPc": "http://skysys.iptime.org:4001/notification/change_notification_state/"
                     }]
             } for number in phone_number
         ]
@@ -377,18 +377,19 @@ def send_alimtalk(data):
     print(response.json(),response.status_code) 
     
 def start():
-    scheduler.add_job(
-        job_daily_notification, 
-        trigger=CronTrigger(hour=9,minute=0), 
-        id='job_daily',
-        misfire_grace_time=300,
-      replace_existing=True,)
-    scheduler.start()
+    return
+    # scheduler.add_job(
+    #     job_daily_notification, 
+    #     trigger=CronTrigger(hour=9,minute=0), 
+    #     id='job_daily',
+    #     misfire_grace_time=300,
+    #   replace_existing=True,)
+    # scheduler.start()
 
-    scheduler_warning.add_job(
-        job_warning_notification, 
-        trigger=IntervalTrigger(minutes=5),
-        id='job_warning',
-        misfire_grace_time=300,
-      replace_existing=True,)
-    scheduler_warning.start()
+    # scheduler_warning.add_job(
+    #     job_warning_notification, 
+    #     trigger=IntervalTrigger(minutes=5),
+    #     id='job_warning',
+    #     misfire_grace_time=300,
+    #   replace_existing=True,)
+    # scheduler_warning.start()
