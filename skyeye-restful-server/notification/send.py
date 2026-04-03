@@ -379,7 +379,7 @@ def send_alimtalk(data):
 def start():
     scheduler.add_job(
         job_daily_notification, 
-        trigger=CronTrigger(hour=9,minute=0), 
+        trigger=CronTrigger(hour=13,minute=55), 
         id='job_daily',
         misfire_grace_time=300,
       replace_existing=True,)

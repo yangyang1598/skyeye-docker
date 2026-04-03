@@ -1,37 +1,7 @@
 from random import choices
 from django.db import models
 
-
 # Create your models here.
-
-class Camera(models.Model):
-    AVAILABILITY_CHOICES = [
-        ('고장', '고장'),
-        ('파손', '파손'),
-        ('기타', '기타'),
-        ('분실', '분실'),
-    ]
-    NIGHT_VISION_CHOICES = [
-        (None, '가능'),
-        (1, '불가능'),
-    ]
-    serial_number = models.CharField(primary_key=True, max_length=100, help_text='카메라 일련번호')
-    availability = models.CharField(max_length=100,choices=AVAILABILITY_CHOICES, blank=True, null=True, help_text='가용 가능 여부')
-    remarks=models.CharField(max_length=100, blank=True, null=True, help_text='비고')
-    maximum_angle_roll = models.IntegerField(blank=True, null=True, help_text='Roll 최대각')
-    minimum_angle_roll = models.IntegerField(blank=True, null=True, help_text='Roll 최소각')
-    maximum_angle_pitch = models.IntegerField(blank=True, null=True, help_text='Pitch 최대각')
-    minimum_angle_pitch = models.IntegerField(blank=True, null=True, help_text='Pitch 최소각')
-    maximum_angle_yaw = models.IntegerField(blank=True, null=True, help_text='Yaw 최대각')
-    minimum_angle_yaw = models.IntegerField(blank=True, null=True, help_text='Yaw 최소각')
-    zoom_magnification = models.IntegerField(blank=True, null=True, help_text='무게')
-    night_vision = models.IntegerField(choices=NIGHT_VISION_CHOICES,blank=True, null=True, help_text='나이트 비전 가능 여부')
-    protocol = models.IntegerField(blank=True, null=True, help_text='프로토콜 타입')
-
-    class Meta:
-        managed = True
-        db_table = 'camera'
-
 
 class Missiondevice(models.Model):
     AVAILABILITY_CHOICES = [
@@ -42,7 +12,7 @@ class Missiondevice(models.Model):
     ]
         
     serial_number = models.CharField(primary_key=True, max_length=100, help_text='임무 장치 일련번호')
-    camera_serial_number = models.OneToOneField(Camera, models.DO_NOTHING, db_column='camera_serial_number',
+    camera_serial_number = models.OneToOneField('camera.Camera', models.DO_NOTHING, db_column='camera_serial_number',
                                                 blank=True, null=True, help_text='카메라 일련번호') # ForeignKey / OneToOneField 임에 따라 Django가 자동으로 combo 설정
     availability = models.CharField(max_length=100, choices=AVAILABILITY_CHOICES, blank=True, null=True, help_text='가용 가능 여부') # choices 를 이용한 combo 구성
     remarks=models.CharField(max_length=100, blank=True, null=True, help_text='비고')

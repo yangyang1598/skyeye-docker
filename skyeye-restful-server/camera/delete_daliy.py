@@ -2,13 +2,13 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 import requests
 from rest_framework.test import APIRequestFactory
-from .views import CameraViewSet
+from .views import CameraViewViewSet
 scheduler = BackgroundScheduler(timezone='Asia/Seoul')
 
 def start():
     scheduler.add_job(
         delete_cameraview, 
-        trigger=CronTrigger(hour=17,minute=0), 
+        trigger=CronTrigger(hour=13,minute=52), 
         id='delete_daily',
         misfire_grace_time=300,
       replace_existing=True,)
@@ -24,7 +24,7 @@ def delete_cameraview():
     request = factory.delete('/camera_view', format='json')
     request.META['HTTP_AUTHORIZATION'] = f'Token {"9cc677a95a7e30226f05ce4d4926af33d2338bb2"}' 
     # View 인스턴스 생성
-    view = CameraViewSet.as_view({'delete': 'delete'})
+    view = CameraViewViewSet.as_view({'delete': 'delete'})
 
     # View 호출
     response = view(request)

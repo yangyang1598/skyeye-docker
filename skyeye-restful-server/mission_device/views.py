@@ -47,19 +47,6 @@ class MissionDeviceViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class CameraViewSet(viewsets.ModelViewSet):
-    queryset = Camera.objects.all()
-    serializer_class = CameraSerializer
-
-    def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-        else:
-            db_logger.exception(status.HTTP_400_BAD_REQUEST)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
 class MissionDeviceDataLogViewSet(viewsets.ModelViewSet):
     queryset = MissiondeviceDataLog.objects.all()
     serializer_class = MissionDeviceDataLogSerializer

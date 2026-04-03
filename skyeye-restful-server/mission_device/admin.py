@@ -4,15 +4,10 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import *
 from skyeye.models import Site
+from camera.models import Camera
 import logging
 
 db_logger = logging.getLogger('db')
-
-class CameraAdmin(admin.ModelAdmin):
-    # 관리자 화면에 보여질 칼럼 지정
-    list_display = (
-        'serial_number', 'availability','remarks', 'maximum_angle_roll', 'minimum_angle_roll', 'maximum_angle_pitch', 'minimum_angle_pitch',
-        'maximum_angle_yaw', 'minimum_angle_yaw', 'zoom_magnification', 'night_vision')
 
 class MissiondeviceAdminForm(forms.ModelForm):
     class Meta:
@@ -67,5 +62,4 @@ class MissiondeviceDataLogAdmin(admin.ModelAdmin):
         return queryset
     
 admin.site.register(Missiondevice, MissiondeviceAdmin)
-admin.site.register(Camera, CameraAdmin)
 admin.site.register(MissiondeviceDataLog, MissiondeviceDataLogAdmin)

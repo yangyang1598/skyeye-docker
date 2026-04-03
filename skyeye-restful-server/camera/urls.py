@@ -3,9 +3,9 @@ from rest_framework import routers
 from django.urls import path, include
 
 router = routers.DefaultRouter()
-router.register(r'camera_view', CameraViewSet)
-
+router.register('camera', CameraViewSet)
+router.register(r'camera_view', CameraViewViewSet)
 urlpatterns = [
     path('', include(router.urls)),
-    # path('camera_view', CameraViewSet.as_view({'post':'create', 'delete':'delete'})),
+    # path('camera_view', CameraViewViewSet.as_view({'post':'create', 'delete':'delete'})),
 ]
