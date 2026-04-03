@@ -109,7 +109,6 @@ JAZZMIN_SETTINGS = {
         "winch.winchdatalog": "fas fa-table",
         "skyeye.site": "fas fa-map-marked-alt",
         "skyeye.sitesettingsconfig":"fas fa-wrench",
-        # "helikite.helikite": "fas fa-parachute-box",
     },
     # # Icons that are used when one is not manually specified
     # "default_icon_parents": "fas fa-chevron-circle-right",

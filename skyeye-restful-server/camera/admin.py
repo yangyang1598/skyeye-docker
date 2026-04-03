@@ -8,8 +8,6 @@ class CameraViewAdmin(admin.ModelAdmin):
     list_display = (
         'camera_view_id', 'site_id', 'format_date', 'latitude', 'longitude',
         'cardinal_direction')
-    fields=['name', 'installation_date', 'helikite_serial_number', 'gcs_serial_number',
-        'missiondevice_serial_number', 'winch_serial_number']
     def format_date(self, obj):
         obj.date = obj.date + timedelta(hours=9)
         return obj.date.strftime('%Y-%m-%d %H:%M:%S')

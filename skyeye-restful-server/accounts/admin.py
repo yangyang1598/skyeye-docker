@@ -63,7 +63,7 @@ class AccountAdmin(UserAdmin):
         ),
     )
 
-    filter_horizontal = ("groups")
+    filter_horizontal = ()
     list_filter = ()
 
     def response_add(self, request, obj, post_url_continue=None):

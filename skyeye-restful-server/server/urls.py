@@ -46,7 +46,6 @@ urlpatterns = [
     path("", include("winch.urls")),
     path("", include("fire_detection.urls")),
     path("", include("skyeye.urls")),
-    path("", include("helikite.urls")),
     path("", include("accounts.urls")),
     path("", include("django_db_logger.urls")),
     path("", include("camera.urls")),

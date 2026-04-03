@@ -377,19 +377,18 @@ def send_alimtalk(data):
     print(response.json(),response.status_code) 
     
 def start():
-    return
-    # scheduler.add_job(
-    #     job_daily_notification, 
-    #     trigger=CronTrigger(hour=9,minute=0), 
-    #     id='job_daily',
-    #     misfire_grace_time=300,
-    #   replace_existing=True,)
-    # scheduler.start()
+    scheduler.add_job(
+        job_daily_notification, 
+        trigger=CronTrigger(hour=9,minute=0), 
+        id='job_daily',
+        misfire_grace_time=300,
+      replace_existing=True,)
+    scheduler.start()
 
-    # scheduler_warning.add_job(
-    #     job_warning_notification, 
-    #     trigger=IntervalTrigger(minutes=5),
-    #     id='job_warning',
-    #     misfire_grace_time=300,
-    #   replace_existing=True,)
-    # scheduler_warning.start()
+    scheduler_warning.add_job(
+        job_warning_notification, 
+        trigger=IntervalTrigger(minutes=5),
+        id='job_warning',
+        misfire_grace_time=300,
+      replace_existing=True,)
+    scheduler_warning.start()

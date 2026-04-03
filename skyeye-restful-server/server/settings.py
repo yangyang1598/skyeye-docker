@@ -60,7 +60,6 @@ INSTALLED_APPS.extend([
     'accounts',
     'camera',
     'fire_detection',
-    'helikite',
     'mission_device',
     'notification',
     'skyeye',
