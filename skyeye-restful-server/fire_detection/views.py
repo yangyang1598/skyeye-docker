@@ -44,23 +44,6 @@ class DetectionView(viewsets.ModelViewSet):
                     
                     serializer.save()
                     
-                    # SSE 전송
-                    sse_data = serializer.data
-                    sse_data['type'] = 'fire_detection'
-                    # 'channels-fire_detection' 채널로 이벤트 전송 (SSE 앱의 규칙 따름)
-                    # site_id가 있으면 해당 채널로 전송 (예: channels-fire_detection-1)
-                    if 'site_id' in sse_data and sse_data['site_id']:
-                        try:
-                            site = Site.objects.get(site_id=sse_data['site_id'])
-                            # site_id에 해당하는 missiondevice_serial_number를 가져와서 채널명에 사용
-                            if site.missiondevice_serial_number_id:
-                                channel_name = 'channels-{}-GCS'.format(site.missiondevice_serial_number_id)
-                                send_event(channel_name, 'message', sse_data, user)
-                        except Site.DoesNotExist:
-                            db_logger.warning("Site not found for site_id: {}".format(sse_data['site_id']))
-                        except Exception as e:
-                            db_logger.exception("Error resolving channel name: {}".format(e))
-
                 except Exception as e:
                     # 실패 시 예외 로그 기록
                     db_logger.exception("Error during saving detection data and sending email: {}".format(e))

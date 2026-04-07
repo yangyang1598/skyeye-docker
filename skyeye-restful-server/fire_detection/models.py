@@ -12,3 +12,4 @@ class Detection(models.Model):
     class Meta:
         managed = True
         db_table = 'fire_detection'
+        verbose_name = 'fire_detection'

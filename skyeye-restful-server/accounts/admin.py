@@ -12,7 +12,7 @@ from accounts.models import NotificationUser, User
 class AccountCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("username", "email", "password1", "password2", "groups", "is_staff", "is_active", "is_superuser")
+        fields = ("username", "first_name","last_name", "password1", "password2", "groups", "is_staff", "is_active", "is_superuser")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,8 +37,8 @@ class AccountChangeForm(UserChangeForm):
 
 class AccountAdmin(UserAdmin):
     # 관리자 화면에 보여질 칼럼 지정
-    list_display = ('username', 'email', 'last_login', 'is_active', 'is_staff')
-    search_fields = ('email', 'username')
+    list_display = ('username', 'first_name','last_name', 'last_login', 'is_active', 'is_staff')
+    search_fields = ('username')
     readonly_fields = ('id', 'last_login')
 
     add_form = AccountCreationForm
@@ -49,7 +49,7 @@ class AccountAdmin(UserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("username", "email", "password1", "password2", "is_superuser", "groups", "is_staff", "is_active"),
+                "fields": ("username", "first_name","last_name", "password1", "password2", "is_superuser", "groups", "is_staff", "is_active"),
             },
         ),
     )
@@ -58,7 +58,7 @@ class AccountAdmin(UserAdmin):
         (
             None,
             {
-                "fields": ("is_superuser", "email", "groups", "is_staff", "is_active"),
+                "fields": ("is_superuser", "first_name","last_name", "groups", "is_staff", "is_active"),
             },
         ),
     )
