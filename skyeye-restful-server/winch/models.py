@@ -3,10 +3,19 @@ from django.db import models
 
 # Create your models here.
 class Winch(models.Model):
+    class BrakeOperations(models.TextChoices):
+        ELECTRONIC = '전자식 브레이크', '전자식 브레이크'
+        MECHANICAL = '기계식 브레이크', '기계식 브레이크'
+
     serial_number = models.CharField(primary_key=True, max_length=100, help_text='윈치 일련번호')
     tetherline_length = models.FloatField(blank=True, null=True, help_text='티더선 전체 길이')
-    router = models.CharField(max_length=100, blank=True, null=True, help_text='윈치 연결 라우터(통신사 정보 포함)')    
-    brake_operations=models.CharField(max_length=100, blank=True, null=True, help_text='브레이크 방식')
+    router = models.CharField(max_length=100, blank=True, null=True, help_text='윈치 연결 라우터(통신사 정보 포함)')
+    brake_operations = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='브레이크 방식',
+    )
 
     class Meta:
         managed = True

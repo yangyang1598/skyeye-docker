@@ -925,3 +925,15 @@ body.jazzmin-login-page {
     float: left;
     width: 100%;
 }
+
+#id_brake_operations,
+#id_brake_operations ul,
+#id_brake_operations li,
+.form-row.field-brake_operations ul,
+.form-row.field-brake_operations li,
+ul.brake-operations-checkboxes,
+ul.brake-operations-checkboxes > li {
+    list-style: none !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
