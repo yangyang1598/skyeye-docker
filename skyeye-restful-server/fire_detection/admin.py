@@ -1,12 +1,24 @@
+from django.apps import apps
 from django.contrib import admin
+
 from .models import Detection
 
 
 class DetectionAdmin(admin.ModelAdmin):
-    # 관리자 화면에 보여질 칼럼 지정
-    # list_display = (
-    #     'id', 'date', 'image', 'detection_rate', 'class_name', 'ai_model', 'user')
     list_display = (
-        'id', 'date', 'site_id', 'class_name', 'ai_model', 'user')
+        'id', 'date', 'site_name', 'class_name')
+
+    def site_name(self, obj):
+        if obj.site_id is None:
+            return '-'
+
+        Site = apps.get_model('skyeye', 'Site')
+        site = Site.objects.filter(site_id=obj.site_id).only('name').first()
+        if not site or not site.name:
+            return str(obj.site_id)
+        return site.name
+
+    site_name.short_description = 'site'
+
 
 admin.site.register(Detection, DetectionAdmin)

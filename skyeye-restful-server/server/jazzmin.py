@@ -101,7 +101,7 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "accounts.user": "fas fa-user",
         "auth.Group": "fas fa-users",
-        "mission_device.camera": "fas fa-camera",
+        "camera.camera": "fas fa-camera",
         "fire_detection.detection": "fas fa-fire-alt",
         "django_db_logger.statusLog": "fas fa-file-alt",
         "django_eventstream.event": "fas fa-calendar",

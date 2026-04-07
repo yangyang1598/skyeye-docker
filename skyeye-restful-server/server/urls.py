@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path, re_path
+from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_yasg.views import get_schema_view
@@ -37,7 +38,8 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path("", admin.site.urls),
+    path("", RedirectView.as_view(url='/admin/', permanent=False)),
+    path("admin/", admin.site.urls),
     # path("api-auth/", include('rest_framework.urls')),
     path('api-token-auth/', obtain_auth_token),
     # 이 아랫 부분은 우리가 사용하는 app들의 URL들을 넣습니다.

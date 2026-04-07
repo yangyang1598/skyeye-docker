@@ -22,7 +22,7 @@ class Camera(models.Model):
     minimum_angle_pitch = models.IntegerField(blank=True, null=True, help_text='Pitch 최소각')
     maximum_angle_yaw = models.IntegerField(blank=True, null=True, help_text='Yaw 최대각')
     minimum_angle_yaw = models.IntegerField(blank=True, null=True, help_text='Yaw 최소각')
-    zoom_magnification = models.IntegerField(blank=True, null=True, help_text='무게')
+    zoom_magnification = models.IntegerField(blank=True, null=True, help_text='Zoom 배율')
     night_vision = models.IntegerField(choices=NIGHT_VISION_CHOICES,blank=True, null=True, help_text='나이트 비전 가능 여부')
     protocol = models.IntegerField(blank=True, null=True, help_text='프로토콜 타입')
 

@@ -51,7 +51,6 @@ class MissionDeviceDataLogViewSet(viewsets.ModelViewSet):
     queryset = MissiondeviceDataLog.objects.all()
     serializer_class = MissionDeviceDataLogSerializer
     
-    # ✅ 이렇게 수정하세요
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # 클래스 레벨에서 실행되지 않도록 __init__ 안으로 이동

@@ -6,7 +6,6 @@ from rest_framework import status
 import logging
 from django.core.mail.message import EmailMessage
 from server import settings
-from accounts.models import User
 from skyeye.models import Site
 from rest_framework.authtoken.models import Token
 import datetime
@@ -34,38 +33,20 @@ class DetectionView(viewsets.ModelViewSet):
 
             try:
                 token = Token.objects.get(key=token_key)
-                # print(token.user)
+
             except Token.DoesNotExist as e:
                 db_logger.exception(e)
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
 
             if not token.user.is_anonymous:
-                user = User.objects.get(username=token.user)
-                # image = request.FILES['image']
-                # print(image)
-                # print(user.email)
-                # print(image.name)
-                # print(user.username)
-                if user.username=="양진현" or user.username=="test_server":
-                
-                    mountain_name="백두"
-                else:
-                    mountain_name=" "
-                
-                detection_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                # subject = "[화재 알림] 금일 {}경 {}산 산불 발생 img:{}".format(detection_time,mountain_name,image.name)
-                to = [user.email]
-                message = "금일 {}경 산불 발생".format(detection_time)
+                user = token.user
                 try:
-                    # mail = EmailMessage(subject=subject, body=message, to=to, from_email=settings.EMAIL_HOST_USER)
-                    # mail.attach(image.name, image.read(), image.content_type)
-                    # mail.send()
-                    serializer.save(user=request.user)
+                    
+                    serializer.save()
                     
                     # SSE 전송
                     sse_data = serializer.data
                     sse_data['type'] = 'fire_detection'
-                    user = User.objects.get(username=token.user)
                     # 'channels-fire_detection' 채널로 이벤트 전송 (SSE 앱의 규칙 따름)
                     # site_id가 있으면 해당 채널로 전송 (예: channels-fire_detection-1)
                     if 'site_id' in sse_data and sse_data['site_id']:
@@ -79,8 +60,6 @@ class DetectionView(viewsets.ModelViewSet):
                             db_logger.warning("Site not found for site_id: {}".format(sse_data['site_id']))
                         except Exception as e:
                             db_logger.exception("Error resolving channel name: {}".format(e))
-                    
-                    db_logger.info("Detection data saved and email sent successfully to {}".format(user.email))
 
                 except Exception as e:
                     # 실패 시 예외 로그 기록

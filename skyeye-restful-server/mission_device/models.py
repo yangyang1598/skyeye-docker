@@ -47,9 +47,7 @@ class MissiondeviceDataLog(models.Model):
     altitude3 = models.FloatField(blank=True, null=True, help_text='고도')
     altitude4 = models.FloatField(blank=True, null=True, help_text='고도')
     temperature = models.FloatField(blank=True, null=True, help_text='온도')
-    voltage = models.FloatField(blank=True, null=True, help_text='전압')
-    rssi = models.IntegerField(db_column='rssi_lte', blank=True, null=True, help_text='무선통신 수신 감도')
-
+   
     class Meta:
         managed = True
         indexes = [
