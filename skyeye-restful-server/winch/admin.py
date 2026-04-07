@@ -6,8 +6,7 @@ from skyeye.models import Site
 class WinchAdmin(admin.ModelAdmin):
     # 관리자 화면에 보여질 칼럼 지정
     list_display = (
-        'serial_number', 'primary_sensor', 'extended_sensor', 'tetherline_length', 'tetherline_limit_tension',
-        'production_year')
+        'serial_number','tetherline_length','router','brake_operations')
 
 class WinchDataLogAdmin(admin.ModelAdmin):
     # date_hierarchy = "date"

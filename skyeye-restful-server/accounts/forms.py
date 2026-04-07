@@ -50,3 +50,4 @@
 #             password = self.cleaned_data['password']
 #             if not authenticate(username=username, password=password):
 #                 raise forms.ValidationError("Invalid login")
+def text_disp

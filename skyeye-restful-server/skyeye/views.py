@@ -38,9 +38,6 @@ class SiteViewSet(viewsets.ModelViewSet):
                 missiondevice_serial_number = request.GET.get('missiondevice_serial_number')
                 # print(missiondevice_serial_number)
                 data = Site.objects.filter(missiondevice_serial_number=missiondevice_serial_number).last()
-            elif request.GET.get('gcs_serial_number') is not None:
-                gcs_serial_number = request.GET.get('gcs_serial_number')
-                data = Site.objects.filter(gcs_serial_number=gcs_serial_number).last()
             else:
                 data = Site.objects.all()
                 serializer = SiteSerializer(data, many=True)

@@ -32,7 +32,7 @@ class MissiondeviceDataLogAdmin(admin.ModelAdmin):
     list_per_page = 20
     list_display = (
         'date', 'latitude', 'longitude', 'roll', 'pitch', 'yaw', 'camera_roll',
-        'camera_pitch', 'camera_yaw', 'camera_zoom', 'pressure', 'altitude', 'altitude2', 'altitude4', 'missiondevice_serial_number'
+        'camera_pitch', 'camera_yaw', 'camera_zoom', 'pressure', 'altitude', 'missiondevice_serial_number'
     )
 
     def get_queryset(self, request):

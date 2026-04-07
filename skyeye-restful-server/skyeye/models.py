@@ -8,7 +8,6 @@ class Site(models.Model):
     site_id = models.IntegerField(primary_key=True, help_text='auto increment PK')
     name = models.CharField(unique=True, max_length=100, blank=True, null=True, help_text='장소명')
     installation_date = models.DateField(blank=True, null=True, help_text='설치 날짜')
-    gcs_serial_number = models.CharField(unique=True, max_length=100, blank=True, null=True, help_text='gcs')
     missiondevice_serial_number = models.OneToOneField(Missiondevice, models.DO_NOTHING, db_column='missiondevice_serial_number',
                                                        blank=True, null=True, help_text='설치된 임무장비 일련번호')
     winch_serial_number = models.OneToOneField(Winch, models.DO_NOTHING, db_column='winch_serial_number',

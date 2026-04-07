@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 with open('./secret_key.txt') as f:
     SECRET_KEY = f.read().strip()  # 패스워드를 암호화할 때 사용하는 키
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # 웹에서 오류가 났을 때 자세한 내용을 알려준다. 배포때는 false로 해야 한다
+DEBUG = True  # 웹에서 오류가 났을 때 자세한 내용을 알려준다. 배포때는 false로 해야 한다
 DATETIME_FORMAT = "Y-m-d H:i:s"
 
 # APPEND_SLASH = False

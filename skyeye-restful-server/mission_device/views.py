@@ -81,8 +81,6 @@ class MissionDeviceDataLogViewSet(viewsets.ModelViewSet):
                         altitude_low = site.missiondevice_altitude_low
                         pressure -= site.missiondevice_pressure_offset-site.winch_pressure_offset
                         altitude = round((winchDataLog.temperature / -0.0065) * math.log(pressure / winchDataLog.pressure), 2)
-                        altitude2 = round(44330 * (1 - (pressure / winchDataLog.pressure)**0.1903), 2)
-                        altitude3 = round((winchDataLog.temperature / 0.0065) * math.log(winchDataLog.pressure / pressure), 2)
                         #if site_winch_temperature[site.name] == None:
                         #    site_winch_temperature[site.name] = winchDataLog.temperature
                         #    print(f'site_winch_temperature[{site.name}] = {site_winch_temperature[site.name]}')
@@ -94,7 +92,7 @@ class MissionDeviceDataLogViewSet(viewsets.ModelViewSet):
                         winch_tether_angle=winchDataLog.tetherline_angle
                         
                         if altitude != None:
-                            serializer = MissiondeviceDataLog(**data, altitude = altitude, altitude2= altitude2, altitude3 = altitude3)#, altitude4 = altitude4)
+                            serializer = MissiondeviceDataLog(**data, altitude = altitude)
                         send_time = time.time()-warning_notification_send_time[site.name]
                         
                         if 600 <= send_time:

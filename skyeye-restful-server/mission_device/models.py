@@ -16,11 +16,6 @@ class Missiondevice(models.Model):
                                                 blank=True, null=True, help_text='카메라 일련번호') # ForeignKey / OneToOneField 임에 따라 Django가 자동으로 combo 설정
     availability = models.CharField(max_length=100, choices=AVAILABILITY_CHOICES, blank=True, null=True, help_text='가용 가능 여부') # choices 를 이용한 combo 구성
     remarks=models.CharField(max_length=100, blank=True, null=True, help_text='비고')
-    # extended_sensor = models.CharField(max_length=100, blank=True, null=True, help_text='확장 센서')
-    # communication_type = models.CharField(max_length=100, blank=True, null=True, help_text="통신방식")
-    # mobile_service_company = models.CharField(max_length=100, blank=True, null=True, help_text='통신사')
-    # weight = models.FloatField(blank=True, null=True, help_text='무게')
-    # production_year = models.TextField(blank=True, null=True, help_text='제작 년도(1901-2155)')
 
     class Meta:
         managed = True
@@ -43,9 +38,6 @@ class MissiondeviceDataLog(models.Model):
     camera_zoom = models.IntegerField(blank=True, null=True, help_text='카메라 Zoom')
     pressure = models.FloatField(blank=True, null=True, help_text='기압')
     altitude = models.FloatField(blank=True, null=True, help_text='고도')
-    altitude2 = models.FloatField(blank=True, null=True, help_text='고도')
-    altitude3 = models.FloatField(blank=True, null=True, help_text='고도')
-    altitude4 = models.FloatField(blank=True, null=True, help_text='고도')
     temperature = models.FloatField(blank=True, null=True, help_text='온도')
    
     class Meta:

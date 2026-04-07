@@ -6,7 +6,7 @@ from .models import Detection
 
 class DetectionAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'date', 'site_name', 'class_name')
+        'id', 'date', 'site_name')
 
     def site_name(self, obj):
         if obj.site_id is None:
