@@ -24,7 +24,9 @@ class MissiondeviceAdmin(admin.ModelAdmin):
     # 관리자 화면에 보여질 칼럼 지정
     list_display = (
         'serial_number', 'camera_serial_number', 'availability','remarks')
-
+    fields = ('serial_number', 'camera_serial_number', 'availability', 'remarks')
+    def get_readonly_fields(self, request, obj=None):
+        return ('serial_number',) if obj else ()
 class MissiondeviceDataLogAdmin(admin.ModelAdmin):
     date_hierarchy = "date"
     list_filter =("date",)

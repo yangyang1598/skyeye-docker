@@ -55,8 +55,10 @@ class WinchAdmin(admin.ModelAdmin):
     form = WinchAdminForm
 
     # 관리자 화면에 보여질 칼럼 지정
-    list_display = (
-        'serial_number','tetherline_length','router','brake_operations')
+    list_display = ('serial_number', 'tetherline_length', 'router', 'brake_operations')
+    fields = ('serial_number', 'tetherline_length', 'router', 'brake_operations')
+    def get_readonly_fields(self, request, obj=None):
+        return ('serial_number',) if obj else ()
 
 class WinchDataLogAdmin(admin.ModelAdmin):
     # date_hierarchy = "date"

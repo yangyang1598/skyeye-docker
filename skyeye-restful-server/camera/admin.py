@@ -9,7 +9,10 @@ class CameraAdmin(admin.ModelAdmin):
     list_display = (
         'serial_number', 'availability','remarks', 'maximum_angle_roll', 'minimum_angle_roll', 'maximum_angle_pitch', 'minimum_angle_pitch',
         'maximum_angle_yaw', 'minimum_angle_yaw', 'zoom_magnification', 'night_vision')
-
+    fields = ('serial_number', 'availability', 'remarks', 'maximum_angle_roll', 'minimum_angle_roll', 'maximum_angle_pitch', 'minimum_angle_pitch',
+        'maximum_angle_yaw', 'minimum_angle_yaw', 'zoom_magnification', 'night_vision')
+    def get_readonly_fields(self, request, obj=None):
+        return ('serial_number',) if obj else ()
 class CameraViewAdmin(admin.ModelAdmin):
     # 관리자 화면에 보여질 칼럼 지정
     list_display = (
