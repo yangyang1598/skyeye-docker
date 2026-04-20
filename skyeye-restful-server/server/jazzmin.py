@@ -49,8 +49,8 @@ JAZZMIN_SETTINGS = {
         {"model": "accounts.User"},
 
         # external url that opens in a new window (Permissions can be added)
-        {"name": "Swagger", "url": "/swagger", "new_window": True},
-        {"name": "Redoc", "url": "/redoc", "new_window": True},
+        # {"name": "Swagger", "url": "/swagger", "new_window": True},
+        # {"name": "Redoc", "url": "/redoc", "new_window": True},
 
         # App with dropdown menu to all its models pages (Permissions checked against models)
         # {"app": "mission_device"},

@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 # from accounts.forms import RegistrationForm, AccountAuthForm
 from rest_framework.authtoken.models import Token
 from .serializers import *
-from .models import User
+from .models import FireUserNotification, User
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -35,3 +35,20 @@ class LoginView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         token = serializer.validated_data
         return Response(token.key, status=status.HTTP_200_OK)
+
+
+class FireUserNotificationListView(generics.ListAPIView):
+    serializer_class = FireUserNotificationSerializer
+
+    def get_queryset(self):
+        queryset = FireUserNotification.objects.select_related('site_id').all().order_by('site_id_id', 'name')
+
+        site_id = self.request.GET.get('site_id')
+        phone_number = self.request.GET.get('phone_number')
+
+        if site_id is not None:
+            queryset = queryset.filter(site_id=site_id)
+        if phone_number is not None:
+            queryset = queryset.filter(phone_number=phone_number)
+
+        return queryset

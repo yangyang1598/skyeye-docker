@@ -19,6 +19,9 @@ from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 import django_eventstream
 from .token_auth import TokenAuthMiddlewareStack
+from sse.heartbeat import heartbeat_loop
+import threading
+
 
 # application = get_asgi_application()
 application = ProtocolTypeRouter({
@@ -31,3 +34,5 @@ application = ProtocolTypeRouter({
     ]),
 
 })
+
+threading.Thread(target=heartbeat_loop, daemon=True).start()

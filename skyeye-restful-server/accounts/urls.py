@@ -7,5 +7,6 @@ from .views import all_logs_view
 urlpatterns = [
     path('signup', RegisterView.as_view()),
     path('login', LoginView.as_view()),
+    path('fire_user_notification/', FireUserNotificationListView.as_view()),
     #path('admin/all-logs/', all_logs_view, name='all_logs'),
 ]

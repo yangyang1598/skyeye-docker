@@ -1,4 +1,4 @@
-from .models import User
+from .models import FireUserNotification, User
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
 from rest_framework import serializers
@@ -56,3 +56,11 @@ class LoginSerializer(serializers.Serializer):
             return token
         raise serializers.ValidationError(
             {"error": "Unable to log in with provided credentials."})
+
+
+class FireUserNotificationSerializer(serializers.ModelSerializer):
+    site_name = serializers.CharField(source='site_id.name', read_only=True)
+
+    class Meta:
+        model = FireUserNotification
+        fields = ('name', 'site_id', 'site_name', 'phone_number')

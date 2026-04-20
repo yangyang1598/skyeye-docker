@@ -39,7 +39,7 @@ class User(AbstractUser):
 
 class NotificationUser(models.Model):
     name = models.CharField(max_length=100)
-    site_id = models.ForeignKey(Site,models.DO_NOTHING,db_column='site_id',help_text='임무장치 번호')
+    site_id = models.ForeignKey(Site,models.DO_NOTHING,db_column='site_id',help_text='임무장치 사이트 번호')
     phone_number = models.CharField(max_length=11,default=0)
 
     def __str__(self):
@@ -48,3 +48,15 @@ class NotificationUser(models.Model):
     class Meta:
         managed = True
         db_table = 'user_notification'
+
+class FireUserNotification(models.Model):
+    name = models.CharField(max_length=100)
+    site_id = models.ForeignKey(Site,models.DO_NOTHING,db_column='site_id',help_text='임무장치 사이트 번호')
+    phone_number = models.CharField(max_length=11,default=0)
+
+    def __str__(self):
+        return f"Name: {self.name} site:{self.site_id} phone_number:{self.phone_number}"
+    
+    class Meta:
+        managed = True
+        db_table = 'fire_user_notification'

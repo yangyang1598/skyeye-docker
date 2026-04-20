@@ -26,13 +26,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 with open('./secret_key.txt') as f:
     SECRET_KEY = f.read().strip()  # 패스워드를 암호화할 때 사용하는 키
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # 웹에서 오류가 났을 때 자세한 내용을 알려준다. 배포때는 false로 해야 한다
+DEBUG = False  # 웹에서 오류가 났을 때 자세한 내용을 알려준다. 배포때는 false로 해야 한다
 DATETIME_FORMAT = "Y-m-d H:i:s"
 
 # APPEND_SLASH = False
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:4001', 'http://192.168.88.46:4001', 'http://skysys.iptime.org:4001']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:4001', 'http://192.168.88.46:4001', 'http://10.8.0.10:4001']
 
 # Application definition
 AUTH_USER_MODEL = 'accounts.User'
@@ -56,7 +56,7 @@ if have_channels():
 
 INSTALLED_APPS.extend([
     # local app
-    'sse',
+    'sse.apps.SseConfig',
     'accounts',
     'camera',
     'fire_detection',

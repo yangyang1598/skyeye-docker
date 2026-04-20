@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
-from accounts.models import NotificationUser, User
+from accounts.models import NotificationUser, User, FireUserNotification
 
 
 def apply_help_texts(form):
@@ -107,6 +107,24 @@ class NotificationAdmin(admin.ModelAdmin):
     list_filter = ()
     fieldsets = ()
 
+class FireUserNotificationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'site_name','phone_number')
+    search_fields = ['site_id__site_id']
+    filter_horizontal = ()
+    list_filter = ()
+    fieldsets = ()
+
+    def site_name(self, obj):
+        return obj.site_id.name if obj.site_id else None
+
+    site_name.short_description = "site"
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == "site_id" and formfield:
+            formfield.label_from_instance = lambda obj: obj.name or str(obj.site_id)
+        return formfield
+
 @admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
     list_display = ('action_time', 'user', 'object_repr', 'change_message')
@@ -117,3 +135,4 @@ class LogEntryAdmin(admin.ModelAdmin):
 
 admin.site.register(User, AccountAdmin)
 admin.site.register(NotificationUser, NotificationAdmin)
+admin.site.register(FireUserNotification, FireUserNotificationAdmin)

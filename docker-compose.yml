@@ -10,6 +10,7 @@ services:
       - ./nginx:/etc/nginx/conf.d
       - ./skyeye-restful-server/static:/static
       - ./skyeye-restful-server/media:/media
+    restart: unless-stopped
     depends_on:
       - web
     networks:
@@ -25,6 +26,7 @@ services:
       - ./skyeye-restful-server:/skyeye-docker-server
       - ./skyeye-restful-server/static:/static
       - ./skyeye-restful-server/media:/media
+    restart: unless-stopped
     depends_on:
       - mariadb
     environment:
@@ -46,6 +48,7 @@ services:
       - MARIADB_VERSION=1:11.4.2+maria~ubu2404
     volumes:
       - /data/mariadb/data:/var/lib/mysql
+    restart: unless-stopped
     ports:
       - "3306:3306" 
     command: mariadbd
